@@ -19,16 +19,17 @@
 
 ## 2. Entity-Relationship Diagram (ERD)
 
-<img width="697" height="447" alt="hotel_management_erd" src="https://github.com/user-attachments/assets/38d41d42-d243-4497-b30f-38fecf9e621f" />
+<img width="697" height="447" alt="hotel_management_erd (1)" src="https://github.com/user-attachments/assets/7a92db2e-79b2-46fb-8791-fdb0218a0aa0" />
+
 
 
 ## 3. Entities and Attributes
 
 * **Hotel**: Represents the lodging establishment. Includes `hotelId` (PK), `name`, `address`, `city`, and `starRating`.
 * **Room**: Defines specific units within a hotel. Includes `roomId` (PK) and `hotelId` (FK). One hotel has many rooms (1:M).
-* **Customer**: Stores user account information like `fullName`, `email`, and `password`.
+* **Customer**: Stores user account information like `fullName`, `email`, `password` and `customerId` (PK).
 * **Reservation**: The core transactional entity tracking `checkInDate`, `checkOutDate`, and `reservationStatus`. It links a `Customer` to a `Room` (M:1).
-* **Review**: Contains `rating` and `comment`. It is linked to a specific `Reservation` to ensure the reviewer actually stayed at the hotel.
+* **Review**: Contains `rating` and `comment`. Also contains `reviewId` (PK), `customerId` (FK) and `roomId` (FK).
 * **Administrator**: Staff members assigned to a hotel via `hotelId` (FK).
 
 ## 4. Assumptions and Constraints
