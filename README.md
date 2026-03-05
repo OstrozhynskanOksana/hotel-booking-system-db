@@ -15,8 +15,8 @@ This repository contains a comprehensive database development lifecycle for a **
 
 * **`main`**: The stable, production-ready version of the database.
 * **`lab1-erd`**: Conceptual modeling and Entity-Relationship Diagram (ERD).
-* **`lab2-sql-schema`**: Converting ERD to PostgreSQL Schema.
+* **`lab2-ddl`**: Converting ERD to PostgreSQL Schema.
 * **`lab3-oltp`**: SQL Data Manipulation (OLTP).
 * **`lab4-olap`**: Analytical SQL Queries (OLAP).
 * **`lab5-normalization`**: Database Normalization.
-* **`lab6-prisma-migrations`**: Schema Migrations using Prisma ORM.
+* **`lab6-migrations`**: Schema Migrations using Prisma ORM.
