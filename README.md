@@ -13,7 +13,7 @@
 ## Project Overview
 This repository contains a comprehensive database development lifecycle for a **Hotel Booking Management System**. The project is structured into several laboratory works, each representing a critical stage of database engineering - from conceptual modeling to advanced SQL analysis and version control.
 
-* **`main`**: The stable, production-ready version of the database.
+* **`README`**: The overview.
 * **`lab1-erd`**: Conceptual modeling and Entity-Relationship Diagram (ERD).
 * **`lab2-ddl`**: Converting ERD to PostgreSQL Schema.
 * **`lab3-oltp`**: SQL Data Manipulation (OLTP).
