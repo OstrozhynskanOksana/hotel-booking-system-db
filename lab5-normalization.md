@@ -51,23 +51,32 @@ CREATE TABLE reservation_status (
     status_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE room (
-    room_id SERIAL PRIMARY KEY,
-    room_number INTEGER NOT NULL,
-    price_per_night NUMERIC(10,2),
-    hotel_id INTEGER REFERENCES hotel(hotel_id),
-    room_type_id INTEGER REFERENCES room_type(room_type_id)
-);
+--------------------------------------
+ALTER TABLE room ADD COLUMN room_type_id INTEGER;
+ALTER TABLE reservation ADD COLUMN status_id INTEGER;
 
-CREATE TABLE reservation (
-    reservation_id SERIAL PRIMARY KEY,
-    check_in_date DATE NOT NULL,
-    check_out_date DATE NOT NULL,
-    number_of_guests INTEGER,
-    status_id INTEGER REFERENCES reservation_status(status_id),
-    customer_id INTEGER REFERENCES customer(customer_id),
-    room_id INTEGER REFERENCES room(room_id)
-);
+UPDATE room r
+SET room_type_id = rt.room_type_id
+FROM room_type rt
+WHERE r.room_type = rt.type_name;
+
+UPDATE reservation res
+SET status_id = rs.status_id
+FROM reservation_status rs
+WHERE res.reservation_status = rs.status_name;
+
+ALTER TABLE room
+ADD CONSTRAINT fk_room_type
+FOREIGN KEY (room_type_id)
+REFERENCES room_type(room_type_id);
+
+ALTER TABLE reservation
+ADD CONSTRAINT fk_status
+FOREIGN KEY (status_id)
+REFERENCES reservation_status(status_id);
+
+ALTER TABLE room DROP COLUMN room_type;
+ALTER TABLE reservation DROP COLUMN reservation_status;
 ```
 
 ## ERD (3NF)
