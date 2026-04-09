@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model administrator {
+  administrator_id Int    @id @default(autoincrement())
+  full_name        String @db.VarChar(100)
+  email            String @unique @db.VarChar(100)
+  hotel_id         Int?
+  hotel            hotel? @relation(fields: [hotel_id], references: [hotel_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model customer {
+  customer_id Int           @id @default(autoincrement())
+  full_name   String        @db.VarChar(100)
+  email       String        @unique @db.VarChar(100)
+  phone       String?       @db.VarChar(20)
+  password    String        @db.VarChar(100)
+  reservation reservation[]
+  review      review[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model hotel {
+  hotel_id      Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  address       String?
+  city          String?         @db.VarChar(100)
+  country       String?         @db.VarChar(100)
+  phone_number  String?         @db.VarChar(20)
+  star_rating   Int?
+  administrator administrator[]
+  room          room[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model reservation {
+  reservation_id     Int                 @id @default(autoincrement())
+  check_in_date      DateTime            @db.Date
+  check_out_date     DateTime            @db.Date
+  number_of_guests   Int?
+  created_at         DateTime            @default(now())
+  status_id          Int?
+  customer_id        Int?
+  room_id            Int?
+  customer           customer?           @relation(fields: [customer_id], references: [customer_id], onDelete: NoAction, onUpdate: NoAction)
+  room               room?               @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)
+  reservation_status reservation_status? @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction)
+  payment            payment[]
+}
+
+model reservation_status {
+  status_id   Int           @id @default(autoincrement())
+  status_name String        @db.VarChar(50)
+  reservation reservation[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  review_id   Int       @id @default(autoincrement())
+  rating      Int
+  comment     String?   @db.VarChar(400)
+  review_date DateTime  @db.Date
+  customer_id Int?
+  room_id     Int?
+  customer    customer? @relation(fields: [customer_id], references: [customer_id], onDelete: NoAction, onUpdate: NoAction)
+  room        room?     @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model room {
+  room_id         Int           @id @default(autoincrement())
+  room_number     Int
+  price_per_night Decimal       @db.Decimal(10, 2)
+  hotel_id        Int?
+  room_type_id    Int?
+  reservation     reservation[]
+  review          review[]
+  room_type       room_type?    @relation(fields: [room_type_id], references: [room_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_room_type")
+  hotel           hotel?        @relation(fields: [hotel_id], references: [hotel_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model room_type {
+  room_type_id Int    @id @default(autoincrement())
+  type_name    String @db.VarChar(50)
+  room         room[]
+}
+
+model payment {
+  payment_id     Int         @id @default(autoincrement())
+  amount         Float
+  payment_date   DateTime    @default(now())
+  method         String
+  reservation_id Int
+  reservation    reservation @relation(fields: [reservation_id], references: [reservation_id])
+}
