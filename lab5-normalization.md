@@ -32,13 +32,29 @@ All tables satisfy 1NF because each field contains atomic values, there are no r
 All tables are in 2NF because each table has a single-column primary key and there are no partial dependencies.
 
 ### Third Normal Form (3NF)
-Most tables satisfy 3NF because all non-key attributes depend only on the primary key and there are no transitive dependencies. The attributes such as room_type and reservation_status contain repeated textual values and can be improved.
+In the hotel table we have a transitive dependency of city on country. They should be put in a separate table. Also, the reservation status and room type should be put in separate tables to avoid data duplication
 
 ## Normalization Improvements
 
-The attribute room_type was extracted into a separate table to eliminate duplication and ensure consistency of values. The same approach was applied to reservation_status.
-
 ## Query (3NF)
+
+```sql
+CREATE TABLE City (
+    cityId SERIAL PRIMARY KEY,
+    cityName VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL
+);
+
+ALTER TABLE Hotel 
+    DROP COLUMN city, 
+    DROP COLUMN country,
+    ADD COLUMN cityId INT,
+    ADD CONSTRAINT fk_hotel_city 
+    FOREIGN KEY (cityId)
+    REFERENCES City(cityId);
+```
+
+Changes to avoid duplications
 
 ```sql
 CREATE TABLE room_type (
@@ -50,6 +66,7 @@ CREATE TABLE reservation_status (
     status_id SERIAL PRIMARY KEY,
     status_name VARCHAR(50) NOT NULL
 );
+
 
 --------------------------------------
 ALTER TABLE room ADD COLUMN room_type_id INTEGER;
@@ -81,5 +98,7 @@ ALTER TABLE reservation DROP COLUMN reservation_status;
 
 ## ERD (3NF)
 
-<img width="1365" height="597" alt="image" src="https://github.com/user-attachments/assets/bbdecf91-bae4-4ba7-ae0c-62ad14f91c46" />
+<img width="1365" height="581" alt="image" src="https://github.com/user-attachments/assets/d0a78282-a0ee-4e48-b702-e3833cec77aa" />
+
+
 
